@@ -37,15 +37,20 @@ You will be required to submit a link to your GitHub, as well as screenshots of 
 Please evaluate your system on the following questions:
 
 1. Explain the concept of object-oriented programming in simple terms to a complete beginner. 
-    - Aspect Tested:
+    - Aspect Tested: Topic explanation
+    - The system performed decently. It compared real world objects such as books, cars, and dogs to explain the idea of an object in programming. It could have been clearer and more informative in its explanation.
 2. Read the following paragraph and provide a concise summary of the key points…
-    - Aspect Tested:
+    - Aspect Tested: Text summarization
+    - The system performed well. It produced a concise summary that explained the paragraph with a sufficient amount of context.
 3. Write a short, imaginative story (100–150 words) about a robot finding friendship in an unexpected place.
-    - Aspect Tested:
+    - Aspect Tested: Text generation
+    - The system performed very well. The story was concise, imaginative, and surprisingly touching.
 4. If a store sells apples in packs of 4 and oranges in packs of 3, how many packs of each do I need to buy to get exactly 12 apples and 9 oranges?
-    - Aspect Tested:
+    - Aspect Tested: Problem solving
+    - The system performed well. It got the correct answer and described its reasoning.
 5. Rewrite the following paragraph in a professional, formal tone…
-    - Aspect Tested:
+    - Aspect Tested: Text editing
+    - The system performed decently well. It produced a paragraph of similar length that was more formal, but the paragraph made less sense that the original.
 
 This "vibe check" now serves as a baseline, of sorts, to help understand what holes your application has.
 
@@ -58,7 +63,7 @@ This "vibe check" now serves as a baseline, of sorts, to help understand what ho
 #### ❓Question #1:
 
 What are some limitations of vibe checking as an evaluation tool?
-##### ✅ Answer:
+##### ✅ Answer: Vibe checking an evaluation tool is a largely subjective and qualitative process. This makes it difficult to achieve an objective benchmark to compare different tools against each other. In addition, while one user may rate a tool highly, another may disagree, leading to a lack of a ground truth.
 
 ### 🚧 Advanced Build (OPTIONAL):
 
