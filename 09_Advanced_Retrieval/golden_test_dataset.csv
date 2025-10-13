@@ -1,0 +1,57 @@
+question,ground_truth
+What are the most common project domains in the dataset?,"Based on the dataset, the most common project domains are:
+
+1. Writing & Content
+2. Customer Support / Helpdesk
+3. Healthcare / MedTech
+4. Security
+5. QA / Testing / Validation
+6. Sales / CRM
+7. Legal / Compliance
+8. Productivity Assistants
+9. Creative / Design / Media
+
+Writing & Content and Customer Support / Helpdesk appear multiple times, indicating they are among the more frequently represented domains."
+Which projects received the highest scores from judges?,"The projects that received the highest scores from judges are:
+
+1. **Pathfinder 27** with a Judge Score of **9.8**
+   - Project Name: DataWeave
+   - Score: 81
+2. **MediMind 10** with a Judge Score of **8.5**
+   - Project Name: SynthMind
+   - Score: 95
+3. **SecureNest 28** with a Judge Score of **9.0**
+   - Project Name: EchoLens
+   - Score: 90
+4. **ChatBridge 44** with a Judge Score of **6.7**
+   - Project Name: AutoVerse
+   - Score: 96
+5. **DocuCheck 47** with a Judge Score of **9.6**
+   - Project Name: SynthMind
+   - Score: 87
+
+Among these, **Pathfinder 27 (DataWeave)** received the highest Judge Score of **9.8**."
+What did judges say about healthcare projects?,"Judges' comments about healthcare projects generally highlighted their cleverness, technical maturity, promising ideas, and solid or impressive real-world impact. For example, one project was described as ""A clever solution with measurable environmental benefit,"" and another was noted for being ""Technically ambitious and well-executed."" Overall, judges appreciated the creativity, validation, and potential for impact in these healthcare-related projects."
+Are there any projects related to AI or machine learning?,"Yes, there are several projects related to AI or machine learning. For example:
+
+- ""LearnWise 39"" focuses on an AI model compression suite enabling on-device reasoning for IoT sensors.
+- ""Pathfinder 27"" involves an AI model compression suite for on-device reasoning for IoT sensors.
+- ""InsightAI 1"" is about a low-latency inference system for multimodal agents in autonomous systems.
+- Several other projects involve federated learning, AI model compression, or inference systems, all of which are related to AI or machine learning.
+
+If you'd like more details about any specific project, please let me know!"
+What are the key characteristics of high-scoring projects?,"Key characteristics of high-scoring projects include:
+
+1. **Strength of Concept and Technical Maturity:** They demonstrate comprehensive or conceptually strong approaches (e.g., SecureNest with a technically mature approach).
+
+2. **Quality of Implementation:** High scores are often associated with well-executed projects, featuring excellent code quality and polished design (e.g., PathFinder with excellent code quality).
+
+3. **Impact and Real-World Relevance:** Projects that have impressive real-world impacts, measurable benefits, or environmental advantages tend to score higher (e.g., TrendLens with measurable environmental benefit).
+
+4. **Innovation and Creativity:** Innovative solutions and novel ideas are valued (e.g., MediMind's interactive environment for generative design).
+
+5. **Polished and Practical Solutions:** Projects described as very polished or pragmatic engineering solutions also tend to excel, despite minor issues in some cases (e.g., TaskFlow with an elegant engineering approach).
+
+6. **Evaluation and Benchmarking:** While some projects are praised for their innovation, they may need stronger evaluation metrics, but overall a strong conceptual foundation is key.
+
+In summary, high-scoring projects are those that combine strong, innovative ideas with high-quality execution, practical impacts, and a polished presentation."
