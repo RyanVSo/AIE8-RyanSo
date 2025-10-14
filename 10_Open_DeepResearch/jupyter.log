@@ -1,0 +1,29 @@
+[I 2025-10-13 10:31:35.515 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2025-10-13 10:31:35.516 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2025-10-13 10:31:35.517 ServerApp] jupyterlab | extension was successfully linked.
+[I 2025-10-13 10:31:35.518 ServerApp] notebook | extension was successfully linked.
+[I 2025-10-13 10:31:35.584 ServerApp] notebook_shim | extension was successfully linked.
+[I 2025-10-13 10:31:35.625 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2025-10-13 10:31:35.625 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2025-10-13 10:31:35.626 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2025-10-13 10:31:35.627 LabApp] JupyterLab extension loaded from /Users/ryan.so/personal/AIE8-RyanSo/10_Open_DeepResearch/.venv/lib/python3.13/site-packages/jupyterlab
+[I 2025-10-13 10:31:35.627 LabApp] JupyterLab application directory is /Users/ryan.so/personal/AIE8-RyanSo/10_Open_DeepResearch/.venv/share/jupyter/lab
+[I 2025-10-13 10:31:35.627 LabApp] Extension Manager is 'pypi'.
+[I 2025-10-13 10:31:35.651 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2025-10-13 10:31:35.652 ServerApp] notebook | extension was successfully loaded.
+[I 2025-10-13 10:31:35.653 ServerApp] The port 8888 is already in use, trying another port.
+[I 2025-10-13 10:31:35.653 ServerApp] The port 8889 is already in use, trying another port.
+[I 2025-10-13 10:31:35.653 ServerApp] The port 8890 is already in use, trying another port.
+[I 2025-10-13 10:31:35.654 ServerApp] Serving notebooks from local directory: /Users/ryan.so/personal/AIE8-RyanSo/10_Open_DeepResearch
+[I 2025-10-13 10:31:35.654 ServerApp] Jupyter Server 2.17.0 is running at:
+[I 2025-10-13 10:31:35.654 ServerApp] http://localhost:8891/tree?token=62b63c5127eba551affaa27b1230cf77fbf71f9a073ed3c4
+[I 2025-10-13 10:31:35.654 ServerApp]     http://127.0.0.1:8891/tree?token=62b63c5127eba551affaa27b1230cf77fbf71f9a073ed3c4
+[I 2025-10-13 10:31:35.654 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2025-10-13 10:31:35.655 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///Users/ryan.so/Library/Jupyter/runtime/jpserver-36555-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8891/tree?token=62b63c5127eba551affaa27b1230cf77fbf71f9a073ed3c4
+        http://127.0.0.1:8891/tree?token=62b63c5127eba551affaa27b1230cf77fbf71f9a073ed3c4
+[I 2025-10-13 10:31:35.663 ServerApp] Skipped non-installed server(s): basedpyright, bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyrefly, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
