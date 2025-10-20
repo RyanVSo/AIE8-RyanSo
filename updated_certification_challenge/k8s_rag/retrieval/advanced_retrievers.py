@@ -41,8 +41,8 @@ class RetrieverType(Enum):
     BASE = "base"
     BM25 = "bm25" 
     MULTI_QUERY = "multi_query"
-    PARENT_DOCUMENT = "parent_document"
-    CONTEXTUAL_COMPRESSION = "contextual_compression"
+    # PARENT_DOCUMENT = "parent_document"  # Removed for simplicity
+    # CONTEXTUAL_COMPRESSION = "contextual_compression"  # Removed for simplicity
     ENSEMBLE = "ensemble"
 
 

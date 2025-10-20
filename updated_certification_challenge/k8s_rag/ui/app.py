@@ -186,9 +186,7 @@ def main():
         ]
         
         for query in example_queries_concepts:
-            if st.button(query, key=f"concept_{query}"):
-                st.session_state.messages.append({"role": "user", "content": query})
-                st.rerun()
+            st.markdown(f"• `{query}`")
     
     with col2:
         st.subheader("Tasks & Operations")
@@ -200,9 +198,7 @@ def main():
         ]
         
         for query in example_queries_tasks:
-            if st.button(query, key=f"task_{query}"):
-                st.session_state.messages.append({"role": "user", "content": query})
-                st.rerun()
+            st.markdown(f"• `{query}`")
     
     # Footer
     st.markdown("---")
