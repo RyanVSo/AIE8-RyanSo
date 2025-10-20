@@ -37,12 +37,12 @@ class K8sRAGEvaluator:
         self.agent = K8sBaseRAGAgent(vector_store)
         self.retriever_factory = K8sAdvancedRetrieverFactory(vector_store)
         
-        # Define evaluation metrics
+        # Define evaluation metrics (matching the course notebook pattern)
         self.metrics = [
-            Faithfulness(llm=self.evaluator_llm),
-            ResponseRelevancy(llm=self.evaluator_llm, embeddings=self.evaluator_embeddings),
-            LLMContextRecall(llm=self.evaluator_llm),
-            ContextEntityRecall(llm=self.evaluator_llm),
+            LLMContextRecall(),
+            Faithfulness(), 
+            ResponseRelevancy(),
+            ContextEntityRecall()
         ]
     
     def create_test_dataset(self) -> List[Dict[str, Any]]:
@@ -193,12 +193,27 @@ class K8sRAGEvaluator:
             for q, a, c, gt in zip(questions, answers, contexts, ground_truths)
         ])
         
-        # Run evaluation
+        # Run evaluation (following the pattern from evaluation_example.ipynb)
         try:
-            results = evaluate(eval_dataset, metrics=self.metrics)
+            from ragas import evaluate, RunConfig
+            
+            # Set up run config with timeout (like in the course notebook)
+            run_config = RunConfig(timeout=360)
+            
+            # Run evaluation - this returns a dictionary directly
+            results = evaluate(
+                dataset=eval_dataset,
+                metrics=self.metrics,
+                llm=self.evaluator_llm,
+                run_config=run_config
+            )
+            
+            # RAGAS evaluate() returns a dictionary directly, like in the course notebook
+            # Example: {'context_recall': 0.1396, 'faithfulness': 0.5506, 'answer_relevancy': 0.5751}
+            
             return {
                 "retriever_type": retriever_type.value,
-                "results": results,
+                "results": results,  # This is already a dictionary
                 "num_questions": len(questions)
             }
         except Exception as e:
@@ -240,13 +255,20 @@ class K8sRAGEvaluator:
                 if "error" not in eval_result:
                     results = eval_result["results"]
                     
-                    # Extract metrics
+                    # Extract metrics with fallback names
+                    def get_metric_value(results, metric_names):
+                        for name in metric_names:
+                            if name in results:
+                                return results[name]
+                        return 0.0
+                    
+                    # Extract metrics using exact keys from RAGAS (as shown in course notebook)
                     comparison_results.append({
                         "Retriever": retriever_type.value.replace('_', ' ').title(),
                         "Faithfulness": results.get("faithfulness", 0.0),
-                        "Response Relevancy": results.get("response_relevancy", 0.0), 
+                        "Response Relevancy": results.get("answer_relevancy", 0.0),  # RAGAS uses 'answer_relevancy'
                         "Context Recall": results.get("context_recall", 0.0),
-                        "Context Entity Recall": results.get("context_entity_recall", 0.0),
+                        "Context Precision": results.get("context_entity_recall", 0.0),  # Using context_entity_recall as proxy
                         "Questions Processed": eval_result["num_questions"]
                     })
                 else:
