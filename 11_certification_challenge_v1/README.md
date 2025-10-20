@@ -2,6 +2,14 @@
 
 An end-to-end RAG (Retrieval-Augmented Generation) system for Kubernetes documentation that demonstrates both base and advanced retrieval methods, complete with RAGAS evaluation framework.
 
+## 🎥 Loom Video
+
+[Watch the project demonstration video](https://www.loom.com/share/c31225b74a8346e4bc5e4c9aa8d21eb8?sid=dc8dd914-ae7f-4c46-a19c-8d9ce749956a)
+
+## 📄 Written Document
+
+[View the detailed project documentation (PDF)](https://github.com/RyanVSo/AIE8-RyanSo/blob/ryan-so-certification-challenge-submission/11_certification_challenge_v1/Certification%20Challenge.pdf)
+
 ## 🌟 Features
 
 - **📚 Comprehensive K8s Documentation**: Loads and processes the complete Kubernetes documentation
