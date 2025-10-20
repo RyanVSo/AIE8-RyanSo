@@ -14,7 +14,7 @@ An end-to-end RAG (Retrieval-Augmented Generation) system for Kubernetes documen
 
 - **📚 Comprehensive K8s Documentation**: Loads and processes the complete Kubernetes documentation
 - **🤖 Intelligent RAG Agent**: Answers questions using context from official K8s docs
-- **🔍 Advanced Retrieval Methods**: Implements BM25, Multi-Query, Parent-Document, Contextual Compression, and Ensemble retrieval
+- **🔍 Advanced Retrieval Methods**: Implements BM25, Multi-Query, and Ensemble retrieval
 - **📊 RAGAS Evaluation**: Comprehensive evaluation using Faithfulness, Response Relevancy, Context Precision, and Context Recall
 - **🖥️ Interactive Web UI**: Streamlit-based interface for testing different retrieval methods
 - **📈 Performance Comparison**: Side-by-side comparison of retrieval methods with detailed metrics
@@ -106,7 +106,7 @@ The application will start on `http://localhost:8501`
 
 1. **Open your browser** to `http://localhost:8501`
 2. **Configure retrieval method** in the sidebar:
-   - Choose from Base, BM25, Multi-Query, Parent-Document, Contextual Compression, or Ensemble
+   - Choose from Base, BM25, Multi-Query, or Ensemble
    - Adjust the number of documents to retrieve
 3. **Ask questions** about Kubernetes in the chat interface
 4. **View system statistics** in the sidebar
