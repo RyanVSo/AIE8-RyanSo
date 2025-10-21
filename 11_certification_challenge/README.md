@@ -8,7 +8,7 @@ An end-to-end RAG (Retrieval-Augmented Generation) system for Kubernetes documen
 
 ## 📄 Written Document
 
-[View the detailed project documentation (PDF)](https://github.com/RyanVSo/AIE8-RyanSo/blob/ryan-so-certification-challenge-submission/11_certification_challenge_v1/Certification%20Challenge.pdf)
+[View the detailed project documentation (PDF)](https://github.com/RyanVSo/AIE8-RyanSo/blob/ryan-so-certification-challenge-submission/11_certification_challenge/Certification%20Challenge.pdf)
 
 ## 🌟 Features
 
