@@ -39,7 +39,18 @@ Run the repository and complete the following:
 Compare the `agent` and `agent_helpful` assistants defined in `langgraph.json`. Where does the helpfulness evaluator fit in the graph, and under what condition should execution route back to the agent vs. terminate?
 
 ##### ✅ Answer:
-_(enter answer here)_
+In the `agent_helpful` assistant (using the `agent_with_helpfulness` graph), the helpfulness evaluator is positioned as a separate node called "helpfulness" that runs after the agent generates a response (when no tool calls are needed). 
+
+The routing logic works as follows:
+1. After the agent node runs, the `route_to_action_or_helpfulness` function checks if the last message contains tool calls
+2. If tool calls are present → routes to "action" node to execute tools, then back to "agent"
+3. If no tool calls → routes to "helpfulness" node for evaluation
+
+The helpfulness node evaluates whether the agent's response adequately addresses the initial query. Based on the evaluation:
+- **Route back to agent**: If helpfulness evaluation returns 'N' (unhelpful), execution continues back to the "agent" node to generate a better response
+- **Terminate**: If helpfulness evaluation returns 'Y' (helpful), or if the loop limit is exceeded (>10 messages), execution terminates
+
+This creates a feedback loop where unhelpful responses trigger additional iterations until the agent provides a satisfactory answer or hits the safety limit to prevent infinite loops.
 
 #### 🏗️ Activity #1 Debugging A Graph
 
@@ -50,7 +61,21 @@ Select the `agent_with_helpfulness` and set one or more interrupts (at least one
 What are your thoughts on when you would use a Before interrupt vs. an After interrupt?
 
 ##### ✅ Answer:
-_(enter answer here)_
+**Before Interrupts** are most useful when you want to:
+- **Inspect and modify input data** before a node processes it (e.g., checking the state, messages, or parameters before they're consumed)
+- **Prevent execution** of a potentially expensive or problematic node based on current conditions
+- **Debug input validation** by examining what data is being passed to a node
+- **Implement dynamic routing** by allowing manual intervention in the decision-making process
+- **Set up test scenarios** where you want to inject specific inputs or modify the state before processing
+
+**After Interrupts** are most useful when you want to:
+- **Inspect and modify output data** after a node has completed its processing (e.g., reviewing the agent's response before it continues)
+- **Validate results** and potentially retry or redirect based on the output quality
+- **Debug output analysis** by examining what a node produced before the next node consumes it
+- **Implement human-in-the-loop workflows** where human review is needed after certain operations
+- **Modify or enhance responses** before they're passed to subsequent nodes
+
+In the context of the `agent_with_helpfulness` graph, a **Before interrupt** on the helpfulness node would let you examine the conversation state before evaluation, while an **After interrupt** would let you review and potentially override the helpfulness decision before routing continues.
 
 
 
