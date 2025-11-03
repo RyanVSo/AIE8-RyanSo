@@ -89,7 +89,25 @@ What are the core components of an `AgentCard`?
 
 ##### ✅ Answer:
 
-<br />
+The core components of an `AgentCard` are:
+
+1. **name**: The display name of the agent (e.g., "General Purpose Agent")
+2. **description**: A detailed description of the agent's purpose and capabilities
+3. **url**: The base URL where the agent server is hosted
+4. **version**: Version identifier for the agent (e.g., "1.0.0")
+5. **default_input_modes**: List of supported content types for input (e.g., ['text', 'text/plain'])
+6. **default_output_modes**: List of supported content types for output
+7. **capabilities**: An `AgentCapabilities` object defining features like:
+   - `streaming`: Whether the agent supports streaming responses
+   - `push_notifications`: Whether the agent supports push notifications
+8. **skills**: A list of `AgentSkill` objects, each containing:
+   - `id`: Unique identifier for the skill
+   - `name`: Display name of the skill
+   - `description`: What the skill does
+   - `tags`: Keywords describing the skill
+   - `examples`: Example use cases for the skill
+
+These components allow clients to discover and understand an agent's capabilities before interacting with it through the A2A protocol.
 
 ### ❓ Question #2:
 
@@ -97,7 +115,21 @@ Why is A2A (and other such protocols) important in your own words?
 
 ##### ✅ Answer:
 
-<br /><br />
+A2A (Agent-to-Agent) and similar protocols are critically important for several key reasons:
+
+1. **Standardization & Interoperability**: A2A provides a standardized way for different AI agents to communicate, regardless of their underlying implementation, framework, or hosting infrastructure. This is like HTTP for the web - it enables diverse systems to work together seamlessly.
+
+2. **Composable AI Systems**: With A2A, we can build complex AI systems by composing multiple specialized agents. One agent might excel at web search, another at document analysis, and another at mathematical reasoning. A2A allows them to work together as a unified system.
+
+3. **Scalability & Distribution**: Rather than building monolithic agents that try to do everything, A2A enables distributed agent architectures where each agent can be independently developed, deployed, and scaled based on demand.
+
+4. **Quality Assurance**: The helpfulness evaluation loop in A2A ensures that agent responses meet quality standards before being returned to users. This creates a feedback mechanism that can improve overall system reliability.
+
+5. **Discovery & Capabilities**: Through AgentCards, clients can discover what agents are available and what they can do before making requests. This enables dynamic routing of requests to the most appropriate agent.
+
+6. **Future-Proofing**: As the AI landscape evolves, having standardized protocols ensures that new agents can integrate with existing systems without requiring complete rewrites or custom integrations.
+
+A2A essentially creates an "internet of agents" where specialized AI services can discover, communicate with, and leverage each other's capabilities in a standardized, reliable way.
 
 <details>
 <summary>🚧 Advanced Build 🚧 (OPTIONAL - <i>open this section for the requirements</i>)</summary>
@@ -127,6 +159,92 @@ This contains:
 # Ship 🚢
 
 - Short demo showing running Client
+
+## 🎬 Demo: Running the Client Agent
+
+Here's how to run a short demo showing the client agent in action:
+
+### Prerequisites
+1. **Environment Setup**: Run the quickstart to set up dependencies
+   ```bash
+   ./quickstart.sh
+   ```
+
+2. **Start the A2A Server**: In one terminal, start the server
+   ```bash
+   uv run python -m app
+   ```
+   The server will start on `http://localhost:10000`
+
+### Option 1: Quick Demo Script 
+```bash
+# In a second terminal, run the automated demo
+./run_demo.sh
+```
+
+### Option 2: Manual Demo
+```bash
+# In a second terminal, run the demo client
+uv run python demo_client.py
+```
+
+### Demo Features
+
+The demo showcases:
+
+1. **Automated Demo Queries**: 
+   - Web search: "What are the latest developments in artificial intelligence?"
+   - Academic search: "Find me recent papers on transformer architectures"  
+   - RAG search: "What information is available in the loaded documents?"
+
+2. **Interactive Mode**: Ask your own questions and see real-time A2A communication
+
+3. **Real-time Monitoring**: Shows response times and A2A protocol communication
+
+### Expected Output
+
+```
+🤖 Simple Client Agent - A2A Protocol Demo
+============================================================
+📤 Demo Query 1/3
+Description: Web search query to test Tavily integration
+Query: What are the latest developments in artificial intelligence?
+--------------------------------------------------------------------------------
+📥 A2A Server Response:
+A2A Server Response: [Detailed AI developments from web search]
+⏱️  Response time: 8.45 seconds
+```
+
+The demo proves the A2A protocol works by showing:
+- ✅ Agent card discovery and connection
+- ✅ Message formatting and transmission  
+- ✅ Tool execution (web search, arxiv, RAG)
+- ✅ Helpfulness evaluation loop
+- ✅ Structured response handling
+
+### Troubleshooting Demo Issues
+
+**Server Connection Error**:
+```bash
+# Check if server is running
+curl http://localhost:10000/.well-known/agent_card
+
+# If not running, start it:
+uv run python -m app
+```
+
+**Import Errors**:
+```bash
+# Make sure dependencies are installed
+uv sync
+
+# Check environment configuration
+uv run python check_env.py
+```
+
+**API Key Issues**:
+- Ensure `OPENAI_API_KEY` is set in your `.env` file
+- Optionally set `TAVILY_API_KEY` for web search functionality
 
 # Share 🚀
 
