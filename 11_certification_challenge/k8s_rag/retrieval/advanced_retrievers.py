@@ -197,7 +197,7 @@ class K8sAdvancedRetrieverFactory:
         
         # Use Cohere reranker if available and API key is set
         cohere_api_key = os.getenv("COHERE_API_KEY")
-        if COHERE_AVAILABLE and cohere_api_key and cohere_api_key != "7qoVzAxVV2QR4xu8LK0qOo26NGNRnSYe6uUlFOGl":
+        if COHERE_AVAILABLE and cohere_api_key and cohere_api_key != "INSERT COHERE API KEY":
             try:
                 compressor = CohereRerank(
                     cohere_api_key=cohere_api_key,
