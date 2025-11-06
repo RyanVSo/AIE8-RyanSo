@@ -73,11 +73,13 @@ def initialize_system():
         
         # Set API keys from environment variables
         if not os.getenv("OPENAI_API_KEY"):
-            # For demo purposes - in production, always use environment variables
-            os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY", "")
-        
-        if not os.getenv("OPENAI_API_KEY"):
             raise HTTPException(status_code=500, detail="OpenAI API key not configured")
+        
+        # Optional: Set Cohere API key for enhanced retrieval methods
+        if os.getenv("COHERE_API_KEY"):
+            logger.info("Cohere API key found - enhanced retrieval methods available")
+        else:
+            logger.info("Cohere API key not set - basic retrieval methods only")
         
         try:
             # Initialize vector store
@@ -119,14 +121,18 @@ async def health_check():
             "status": "healthy",
             "initialized": True,
             "total_documents": stats["total_documents"],
-            "k8s_imports": K8S_IMPORTS_AVAILABLE
+            "k8s_imports": K8S_IMPORTS_AVAILABLE,
+            "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
+            "cohere_configured": bool(os.getenv("COHERE_API_KEY"))
         }
     except Exception as e:
         return {
             "status": "error", 
             "initialized": False,
             "error": str(e),
-            "k8s_imports": K8S_IMPORTS_AVAILABLE
+            "k8s_imports": K8S_IMPORTS_AVAILABLE,
+            "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
+            "cohere_configured": bool(os.getenv("COHERE_API_KEY"))
         }
 
 @app.get("/api/stats", response_model=SystemStats)

@@ -68,8 +68,8 @@ The application has been converted from Streamlit to a Vercel-compatible archite
 3. Import your GitHub repository
 4. Vercel will automatically detect the configuration from `vercel.json`
 5. Add environment variables:
-   - `OPENAI_API_KEY`: Your OpenAI API key
-   - `COHERE_API_KEY`: (Optional) Cohere API key for enhanced retrieval
+   - `OPENAI_API_KEY`: Your OpenAI API key (required)
+   - `COHERE_API_KEY`: Your Cohere API key (optional, but recommended for enhanced retrieval)
 6. Click "Deploy"
 
 #### Option B: Vercel CLI
@@ -89,6 +89,9 @@ The application has been converted from Streamlit to a Vercel-compatible archite
    ```bash
    vercel env add OPENAI_API_KEY
    # Enter your OpenAI API key when prompted
+   
+   vercel env add COHERE_API_KEY
+   # Enter your Cohere API key when prompted (optional but recommended)
    ```
 
 ### 3. Configure Environment Variables
@@ -103,7 +106,7 @@ In your Vercel dashboard, go to your project settings and add:
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `OPENAI_API_KEY` | Yes | OpenAI API key for language model access |
-| `COHERE_API_KEY` | No | Cohere API key for enhanced retrieval methods |
+| `COHERE_API_KEY` | Recommended | Cohere API key for enhanced retrieval methods and reranking |
 
 ## 📊 Features
 

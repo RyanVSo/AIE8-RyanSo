@@ -63,7 +63,9 @@ An intelligent Kubernetes management assistant that provides natural language in
    - Go to [vercel.com](https://vercel.com)
    - Click "New Project"
    - Import your forked repository
-   - Add environment variable: `OPENAI_API_KEY`
+   - Add environment variables:
+     - `OPENAI_API_KEY` (required)
+     - `COHERE_API_KEY` (optional, for enhanced retrieval)
    - Click "Deploy"
 
 3. **Access your deployed app** at `https://your-project-name.vercel.app`
@@ -84,6 +86,7 @@ An intelligent Kubernetes management assistant that provides natural language in
 3. **Set up environment variables:**
    ```bash
    export OPENAI_API_KEY="your-openai-api-key-here"
+   export COHERE_API_KEY="your-cohere-api-key-here"  # Optional, for enhanced retrieval
    ```
 
 4. **Run locally:**

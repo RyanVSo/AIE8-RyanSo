@@ -58,6 +58,12 @@ def main():
         print("   Set it with: export OPENAI_API_KEY='your-key-here'")
         print()
     
+    if not os.getenv("COHERE_API_KEY"):
+        print("💡 Info: COHERE_API_KEY environment variable not set")
+        print("   This is optional but recommended for enhanced retrieval")
+        print("   Set it with: export COHERE_API_KEY='your-cohere-key-here'")
+        print()
+    
     # Check dependencies
     if not check_dependencies():
         return 1
