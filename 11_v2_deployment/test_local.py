@@ -49,8 +49,11 @@ def start_frontend_server():
 
 def main():
     """Main testing function."""
-    print("🧪 Kubernetes Copilot - Local Testing")
-    print("=" * 50)
+    print("🧪 Kubernetes Copilot - Lightweight Local Testing")
+    print("=" * 55)
+    print("Note: This is the lightweight version optimized for Vercel deployment")
+    print("Uses mock data and simplified OpenAI integration")
+    print()
     
     # Check environment variables
     if not os.getenv("OPENAI_API_KEY"):

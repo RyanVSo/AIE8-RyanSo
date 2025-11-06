@@ -33,11 +33,12 @@ The application has been converted from Streamlit to a Vercel-compatible archite
 
 ## 🔧 Configuration Changes
 
-### Backend Changes
-- **FastAPI**: Replaced Streamlit with FastAPI for serverless compatibility
-- **Stateless Design**: Removed session state dependencies
-- **Optimized Dependencies**: Reduced package size for faster cold starts
-- **Error Handling**: Added comprehensive error handling for serverless environment
+### Backend Changes (Lightweight Version)
+- **FastAPI**: Replaced Streamlit with FastAPI for serverless compatibility  
+- **Ultra-Lightweight**: Minimal dependencies (<250MB) to meet Vercel limits
+- **OpenAI Integration**: Direct GPT-4o-mini integration without heavy agent frameworks
+- **Mock Data**: Uses structured mock data instead of vector database for demonstrations
+- **Simplified Agents**: Basic OpenAI chat instead of full LangGraph orchestration
 
 ### Frontend Changes
 - **Web-based UI**: Pure HTML/CSS/JavaScript instead of Streamlit

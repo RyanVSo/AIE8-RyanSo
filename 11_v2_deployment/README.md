@@ -2,16 +2,25 @@
 
 An intelligent Kubernetes management assistant that provides natural language interactions with your cluster data, cost analysis, and actionable recommendations. **Now optimized for Vercel deployment!**
 
-## 🌟 Features
+## 🌟 Features (Lightweight Vercel Version)
 
-- **🗣️ Natural Language Queries**: Ask questions like "What are the costs of my Kubernetes deployments?" or "How many GPUs does this deployment use?"
-- **🤖 Agentic RAG**: Multi-agent system with specialized tools for different K8s operations
-- **💰 Cost Analysis**: Interactive cost tracking and optimization recommendations with charts
-- **⚡ Resource Optimization**: Suggestions for improving resource utilization
-- **📄 YAML Manifest Analysis**: Direct analysis of Kubernetes manifests
+- **🗣️ Natural Language Queries**: Ask questions about Kubernetes deployments, costs, and resources
+- **🤖 OpenAI-Powered Responses**: Intelligent answers using GPT-4o-mini with Kubernetes context
+- **💰 Cost Analysis**: Interactive cost tracking with mock cluster data and visualizations
+- **⚡ Resource Insights**: Resource utilization analysis and optimization suggestions
 - **🖥️ Modern Web UI**: Responsive web interface optimized for all devices
-- **☁️ Serverless Ready**: Optimized for Vercel's serverless platform
+- **☁️ Serverless Optimized**: Ultra-lightweight (<250MB) for Vercel deployment
 - **🚀 Fast Deployment**: One-click deployment to Vercel
+
+### ⚡ Lightweight Mode
+This Vercel deployment uses a streamlined version with:
+- ✅ **OpenAI Integration**: Full GPT-4o-mini chat functionality
+- ✅ **Cost Analysis**: Interactive charts and mock cluster data
+- ✅ **Web Interface**: Complete responsive UI
+- ⚠️ **Simplified Data**: Uses mock Kubernetes data instead of real vector database
+- ⚠️ **Basic Agents**: Simplified agents without full LangGraph orchestration
+
+*For full functionality with real vector database and advanced agents, use the local deployment version.*
 
 ## 🏗️ Architecture
 

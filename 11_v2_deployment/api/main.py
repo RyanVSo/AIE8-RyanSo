@@ -1,5 +1,6 @@
 """
-FastAPI backend for Kubernetes Copilot - Vercel compatible.
+Lightweight FastAPI backend for Kubernetes Copilot - Vercel serverless deployment.
+Minimal dependencies to stay under 250MB limit.
 """
 
 from fastapi import FastAPI, HTTPException
@@ -7,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 import json
-from pathlib import Path
 from typing import Dict, Any, List, Optional
 import logging
 
@@ -15,39 +15,31 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Kubernetes Copilot API", version="1.0.0")
+app = FastAPI(title="Kubernetes Copilot API", version="2.0.0")
 
-# Add CORS middleware for frontend access
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your domain
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Import K8s components (handle import errors gracefully for Vercel)
+# Try to import OpenAI (minimal dependency)
 try:
-    import sys
-    sys.path.append(str(Path(__file__).parent.parent))
-    
-    from k8s_copilot.vector_db.vector_store import K8sVectorStore
-    from k8s_copilot.vector_db.data_loader import K8sDataLoader
-    from k8s_copilot.agents.k8s_agent import K8sCopilotAgent, K8sRAGAgent
-    
-    K8S_IMPORTS_AVAILABLE = True
+    from langchain_openai import ChatOpenAI
+    from langchain_core.messages import HumanMessage, SystemMessage
+    OPENAI_AVAILABLE = True
+    logger.info("OpenAI integration available")
 except ImportError as e:
-    logger.warning(f"K8s imports not available: {e}")
-    K8S_IMPORTS_AVAILABLE = False
+    logger.warning(f"OpenAI not available: {e}")
+    OPENAI_AVAILABLE = False
 
-# Global variables for caching (in production, use Redis or similar)
-_vector_store = None
-_copilot_agent = None
-_rag_agent = None
-
+# Pydantic models
 class QueryRequest(BaseModel):
     query: str
-    agent_type: str = "copilot"  # "copilot" or "rag"
+    agent_type: str = "copilot"
 
 class QueryResponse(BaseModel):
     response: str
@@ -61,116 +53,147 @@ class SystemStats(BaseModel):
     document_types: Dict[str, int]
     initialized: bool
 
-def initialize_system():
-    """Initialize the K8s system with caching."""
-    global _vector_store, _copilot_agent, _rag_agent
+# Mock data for demonstration (since we removed vector database)
+MOCK_K8S_DATA = {
+    "deployments": [
+        {"name": "nginx-deployment", "replicas": 3, "cpu": "500m", "memory": "512Mi"},
+        {"name": "api-server", "replicas": 2, "cpu": "1000m", "memory": "1Gi"},
+        {"name": "ml-training", "replicas": 1, "cpu": "2000m", "memory": "4Gi", "gpus": 2},
+        {"name": "database-postgresql", "replicas": 1, "cpu": "500m", "memory": "2Gi"},
+        {"name": "frontend-react", "replicas": 2, "cpu": "250m", "memory": "256Mi"}
+    ],
+    "costs": {
+        "nginx-deployment": {"monthly": 45.20, "cpu_cost": 25.50, "memory_cost": 19.70},
+        "api-server": {"monthly": 89.40, "cpu_cost": 52.80, "memory_cost": 36.60},
+        "ml-training": {"monthly": 234.60, "cpu_cost": 134.20, "memory_cost": 100.40},
+        "database-postgresql": {"monthly": 78.30, "cpu_cost": 22.10, "memory_cost": 56.20},
+        "frontend-react": {"monthly": 23.15, "cpu_cost": 12.50, "memory_cost": 10.65}
+    },
+    "cluster_stats": {
+        "total_nodes": 5,
+        "total_pods": 23,
+        "total_deployments": 5,
+        "total_gpus": 2,
+        "cpu_utilization": "65%",
+        "memory_utilization": "78%",
+        "storage_utilization": "42%",
+        "network_utilization": "23%"
+    }
+}
+
+def get_openai_response(query: str, agent_type: str = "copilot") -> str:
+    """Get response from OpenAI using minimal LangChain."""
+    if not OPENAI_AVAILABLE:
+        return "OpenAI integration not available. This is a mock response for your query: " + query
     
-    if not K8S_IMPORTS_AVAILABLE:
-        raise HTTPException(status_code=500, detail="K8s components not available")
+    if not os.getenv("OPENAI_API_KEY"):
+        return "OpenAI API key not configured. Please set OPENAI_API_KEY environment variable."
     
-    if _vector_store is None:
-        logger.info("Initializing K8s system...")
+    try:
+        # Initialize ChatOpenAI
+        llm = ChatOpenAI(
+            model="gpt-4o-mini",
+            temperature=0.1,
+            max_tokens=1000
+        )
         
-        # Set API keys from environment variables
-        if not os.getenv("OPENAI_API_KEY"):
-            raise HTTPException(status_code=500, detail="OpenAI API key not configured")
-        
-        # Optional: Set Cohere API key for enhanced retrieval methods
-        if os.getenv("COHERE_API_KEY"):
-            logger.info("Cohere API key found - enhanced retrieval methods available")
+        # Create system message based on agent type
+        if agent_type == "rag":
+            system_msg = """You are a simple Kubernetes assistant. Answer questions about Kubernetes deployments, costs, and resources based on the following mock data:
+
+Deployments:
+- nginx-deployment: 3 replicas, 500m CPU, 512Mi memory, monthly cost: $45.20
+- api-server: 2 replicas, 1000m CPU, 1Gi memory, monthly cost: $89.40  
+- ml-training: 1 replica, 2000m CPU, 4Gi memory, 2 GPUs, monthly cost: $234.60
+- database-postgresql: 1 replica, 500m CPU, 2Gi memory, monthly cost: $78.30
+- frontend-react: 2 replicas, 250m CPU, 256Mi memory, monthly cost: $23.15
+
+Cluster Stats:
+- Total nodes: 5, Total pods: 23, Total deployments: 5, Total GPUs: 2
+- CPU utilization: 65%, Memory: 78%, Storage: 42%, Network: 23%
+
+Answer directly and concisely."""
         else:
-            logger.info("Cohere API key not set - basic retrieval methods only")
+            system_msg = """You are an expert Kubernetes Copilot assistant with specialized knowledge of cluster management, cost optimization, and resource analysis.
+
+You have access to the following cluster data:
+- 5 deployments running across 5 nodes with 23 total pods
+- 2 GPUs available in the ml-training deployment
+- Total monthly cluster cost: $470.65
+- Current utilization: CPU 65%, Memory 78%, Storage 42%, Network 23%
+
+Key deployments and their costs:
+- ml-training (most expensive): $234.60/month, 2 GPUs, 4Gi memory
+- api-server: $89.40/month, high CPU usage
+- database-postgresql: $78.30/month, memory intensive
+- nginx-deployment: $45.20/month, load balancer
+- frontend-react (least expensive): $23.15/month
+
+Provide detailed, actionable insights about costs, optimization opportunities, resource utilization, and specific recommendations for Kubernetes best practices."""
         
-        try:
-            # Initialize vector store
-            _vector_store = K8sVectorStore()
-            
-            # Load data
-            data_dir = Path(__file__).parent.parent / "k8s_copilot" / "data"
-            if not data_dir.exists():
-                logger.error(f"Data directory not found: {data_dir}")
-                raise HTTPException(status_code=500, detail="Data directory not found")
-            
-            data_loader = K8sDataLoader(data_dir)
-            data_loader.load_all_data(_vector_store)
-            
-            # Initialize agents
-            _copilot_agent = K8sCopilotAgent(_vector_store)
-            _rag_agent = K8sRAGAgent(_vector_store)
-            
-            logger.info("K8s system initialized successfully")
-            
-        except Exception as e:
-            logger.error(f"Failed to initialize K8s system: {e}")
-            raise HTTPException(status_code=500, detail=f"System initialization failed: {str(e)}")
-    
-    return _vector_store, _copilot_agent, _rag_agent
+        # Create messages
+        messages = [
+            SystemMessage(content=system_msg),
+            HumanMessage(content=query)
+        ]
+        
+        # Get response
+        response = llm.invoke(messages)
+        return response.content
+        
+    except Exception as e:
+        logger.error(f"OpenAI API error: {e}")
+        return f"Error processing query with OpenAI: {str(e)}"
 
 @app.get("/")
 async def root():
     """Health check endpoint."""
-    return {"message": "Kubernetes Copilot API is running", "status": "healthy"}
+    return {"message": "Kubernetes Copilot API is running", "status": "healthy", "version": "2.0.0-lightweight"}
 
 @app.get("/health")
 async def health_check():
     """Detailed health check."""
-    try:
-        vector_store, _, _ = initialize_system()
-        stats = vector_store.get_stats()
-        return {
-            "status": "healthy",
-            "initialized": True,
-            "total_documents": stats["total_documents"],
-            "k8s_imports": K8S_IMPORTS_AVAILABLE,
-            "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
-            "cohere_configured": bool(os.getenv("COHERE_API_KEY"))
-        }
-    except Exception as e:
-        return {
-            "status": "error", 
-            "initialized": False,
-            "error": str(e),
-            "k8s_imports": K8S_IMPORTS_AVAILABLE,
-            "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
-            "cohere_configured": bool(os.getenv("COHERE_API_KEY"))
-        }
+    return {
+        "status": "healthy",
+        "initialized": True,
+        "total_documents": 50,  # Mock data
+        "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
+        "cohere_configured": False,  # Removed to reduce size
+        "mode": "lightweight",
+        "vector_db": False,  # Disabled for size limits
+        "full_agent_system": False  # Disabled for size limits
+    }
 
 @app.get("/stats", response_model=SystemStats)
 async def get_system_stats():
     """Get system statistics."""
-    try:
-        vector_store, _, _ = initialize_system()
-        stats = vector_store.get_stats()
-        return SystemStats(
-            total_documents=stats["total_documents"],
-            document_types=stats["document_types"],
-            initialized=True
-        )
-    except Exception as e:
-        logger.error(f"Failed to get stats: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return SystemStats(
+        total_documents=50,  # Mock data
+        document_types={
+            "deployments": 5,
+            "services": 5,
+            "configmaps": 10,
+            "secrets": 8,
+            "ingresses": 5,
+            "cost_data": 12,
+            "resource_metrics": 5
+        },
+        initialized=True
+    )
 
 @app.post("/query", response_model=QueryResponse)
 async def process_query(request: QueryRequest):
-    """Process a user query."""
+    """Process a user query using lightweight OpenAI integration."""
     try:
         if not request.query.strip():
             raise HTTPException(status_code=400, detail="Query cannot be empty")
         
-        vector_store, copilot_agent, rag_agent = initialize_system()
+        logger.info(f"Processing query: {request.query[:50]}...")
         
-        # Select agent based on type
-        if request.agent_type.lower() == "rag":
-            agent = rag_agent
-            agent_display = "RAG Agent"
-        else:
-            agent = copilot_agent
-            agent_display = "Copilot Agent"
+        # Get response from OpenAI
+        response = get_openai_response(request.query.strip(), request.agent_type)
         
-        logger.info(f"Processing query with {agent_display}: {request.query[:50]}...")
-        
-        # Process the query
-        response = agent.invoke(request.query.strip())
+        agent_display = "RAG Agent (Lightweight)" if request.agent_type == "rag" else "Copilot Agent (Lightweight)"
         
         return QueryResponse(
             response=response,
@@ -191,36 +214,29 @@ async def process_query(request: QueryRequest):
 
 @app.get("/cost-data")
 async def get_cost_data():
-    """Get cost analysis data for visualization."""
+    """Get cost analysis data (mock data for lightweight deployment)."""
     try:
-        data_dir = Path(__file__).parent.parent / "k8s_copilot" / "data"
+        # Generate mock cost data structure compatible with frontend
+        deployment_costs = []
+        for i, (deployment, cost_info) in enumerate(MOCK_K8S_DATA["costs"].items()):
+            deployment_costs.append({
+                "deployment": deployment,
+                "date": f"2024-11-{str(i+1).zfill(2)}",
+                "total_cost": cost_info["monthly"] / 30,  # Daily cost
+                "cpu_cost": cost_info["cpu_cost"] / 30,
+                "memory_cost": cost_info["memory_cost"] / 30,
+                "storage_cost": (cost_info["monthly"] - cost_info["cpu_cost"] - cost_info["memory_cost"]) / 30 * 0.3,
+                "network_cost": (cost_info["monthly"] - cost_info["cpu_cost"] - cost_info["memory_cost"]) / 30 * 0.1
+            })
         
-        # Load cost data files
-        cost_files = {
-            "deployment_costs": data_dir / "deployment_costs.csv",
-            "node_costs": data_dir / "node_costs.csv",
-            "cost_data": data_dir / "cost_data.json"
+        return {
+            "success": True,
+            "data": {
+                "deployment_costs": deployment_costs,
+                "node_costs": None,  # Simplified for lightweight deployment
+                "cost_data": MOCK_K8S_DATA["costs"]
+            }
         }
-        
-        result = {}
-        
-        for file_type, file_path in cost_files.items():
-            if file_path.exists():
-                try:
-                    if file_path.suffix == '.csv':
-                        import pandas as pd
-                        df = pd.read_csv(file_path)
-                        result[file_type] = df.to_dict('records')
-                    elif file_path.suffix == '.json':
-                        with open(file_path, 'r') as f:
-                            result[file_type] = json.load(f)
-                except Exception as e:
-                    logger.warning(f"Failed to load {file_type}: {e}")
-                    result[file_type] = None
-            else:
-                result[file_type] = None
-        
-        return {"success": True, "data": result}
         
     except Exception as e:
         logger.error(f"Failed to get cost data: {e}")
@@ -243,14 +259,7 @@ async def get_example_queries():
         ]
     }
 
-# Export the app for Vercel
-# This is the entry point that Vercel will use
-def handler(event, context):
-    """AWS Lambda/Vercel handler"""
-    return app
-
-# For Vercel deployment - export the FastAPI app
-# Vercel will use this as the ASGI application
+# Export for Vercel serverless
 from mangum import Mangum
 handler = Mangum(app)
 

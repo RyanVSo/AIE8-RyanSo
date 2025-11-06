@@ -1,33 +1,24 @@
-# Root requirements.txt for Vercel deployment
-# This points to the actual requirements in the deployment directory
+# Ultra-lightweight Vercel deployment requirements
+# Minimal dependencies to stay under 250MB limit
 
-# FastAPI and core web framework
+# Core web framework
 fastapi>=0.104.0
-uvicorn>=0.24.0
 
-# Core LangChain dependencies
+# Essential LangChain for OpenAI only
 langchain-core>=0.3.0
 langchain-openai>=0.2.0
-langchain-community>=0.3.0
-langgraph>=0.2.0
 
-# Vector database
-qdrant-client>=1.11.0
-langchain-qdrant>=0.2.0
-
-# Data processing (essential only)
-pandas>=2.0.0
-numpy>=1.24.0
+# Minimal utilities
 pydantic>=2.0.0
-pyyaml>=6.0
-
-# Text processing
-langchain-text-splitters>=0.3.0
-
-# Enhanced retrieval (optional but recommended)
-langchain-cohere>=0.1.0
-
-# Utilities
 python-dotenv>=1.0.0
-tiktoken>=0.8.0
 mangum>=0.17.0
+
+# Removed heavy dependencies that cause size limit issues:
+# - langchain-community (~100MB+ with dependencies)
+# - langgraph (~50MB+ agent framework)  
+# - qdrant-client (~30MB+ vector database)
+# - pandas/numpy (~50MB+ data processing)
+# - langchain-text-splitters (~20MB)
+# - langchain-cohere (~30MB)
+# - tiktoken (~20MB)
+# - uvicorn (not needed for Vercel serverless)
