@@ -15,9 +15,5 @@
       "runtime": "python3.9",
       "maxDuration": 30
     }
-  },
-  "env": {
-    "OPENAI_API_KEY": "@openai_api_key",
-    "COHERE_API_KEY": "@cohere_api_key"
   }
 }
