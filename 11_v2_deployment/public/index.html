@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚓ Kubernetes Copilot</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚓</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>⚓ Kubernetes Copilot</h1>
+            <p class="subtitle">Your intelligent assistant for Kubernetes cluster management</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-button active" data-tab="chat">💬 Chat</button>
+            <button class="tab-button" data-tab="costs">💰 Cost Analysis</button>
+            <button class="tab-button" data-tab="resources">📊 Resources</button>
+        </nav>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>🚀 System Status</h3>
+                <div class="status-indicator" id="status-indicator">
+                    <span class="status-dot loading"></span>
+                    <span id="status-text">Initializing...</span>
+                </div>
+                <div id="system-stats">
+                    <div class="metric">
+                        <span class="metric-label">Documents:</span>
+                        <span class="metric-value" id="total-docs">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>💡 Example Queries</h3>
+                <div id="example-queries" class="example-queries">
+                    <div class="loading">Loading examples...</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Chat Tab -->
+            <div id="chat-tab" class="tab-content active">
+                <div class="chat-container">
+                    <div class="agent-selection">
+                        <label>
+                            <input type="radio" name="agent" value="copilot" checked>
+                            🤖 Copilot Agent (with tools)
+                        </label>
+                        <label>
+                            <input type="radio" name="agent" value="rag">
+                            📚 RAG Agent (simple Q&A)
+                        </label>
+                    </div>
+
+                    <div class="query-section">
+                        <div class="input-group">
+                            <input 
+                                type="text" 
+                                id="query-input" 
+                                placeholder="e.g., What are the costs of my Kubernetes deployments?"
+                                maxlength="500"
+                            >
+                            <button id="ask-button" class="ask-button">Ask</button>
+                        </div>
+                        <div class="query-counter">
+                            <span id="char-count">0</span>/500 characters
+                        </div>
+                    </div>
+
+                    <div id="response-section" class="response-section">
+                        <div class="welcome-message">
+                            <h3>💡 Getting Started</h3>
+                            <p>Ask a question about your Kubernetes cluster using the examples in the sidebar, or type your own question above.</p>
+                        </div>
+                    </div>
+
+                    <div id="chat-history" class="chat-history">
+                        <h3>📝 Recent Conversations</h3>
+                        <div id="history-list" class="history-list">
+                            <p class="empty-state">No previous conversations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Analysis Tab -->
+            <div id="costs-tab" class="tab-content">
+                <div class="dashboard-section">
+                    <h2>💰 Cost Analysis Dashboard</h2>
+                    <div class="chart-grid">
+                        <div class="chart-container">
+                            <canvas id="cost-chart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="breakdown-chart"></canvas>
+                        </div>
+                    </div>
+                    <div id="cost-metrics" class="metrics-grid">
+                        <div class="metric-card">
+                            <h4>Total Monthly Cost</h4>
+                            <span class="metric-value" id="total-cost">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Most Expensive Deployment</h4>
+                            <span class="metric-value" id="expensive-deployment">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Potential Savings</h4>
+                            <span class="metric-value" id="potential-savings">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Tab -->
+            <div id="resources-tab" class="tab-content">
+                <div class="dashboard-section">
+                    <h2>📊 Resource Utilization</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h4>CPU Utilization</h4>
+                            <span class="metric-value" id="cpu-util">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Memory Utilization</h4>
+                            <span class="metric-value" id="memory-util">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Storage Utilization</h4>
+                            <span class="metric-value" id="storage-util">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Network Utilization</h4>
+                            <span class="metric-value" id="network-util">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h4>Total Nodes</h4>
+                            <span class="metric-value" id="total-nodes">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Total Pods</h4>
+                            <span class="metric-value" id="total-pods">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Total Deployments</h4>
+                            <span class="metric-value" id="total-deployments">Loading...</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Total GPUs</h4>
+                            <span class="metric-value" id="total-gpus">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Built with ❤️ using LangChain, LangGraph, and FastAPI</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# Optimized dependencies for Vercel deployment
+# FastAPI and core web framework
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# Core LangChain dependencies (minimal set)
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langchain-community>=0.3.0
+langgraph>=0.2.0
+
+# Vector database (lighter alternative or client-only)
+qdrant-client>=1.11.0
+langchain-qdrant>=0.2.0
+
+# Essential data processing
+pandas>=2.0.0
+numpy>=1.24.0
+pydantic>=2.0.0
+
+# Minimal utilities
+python-dotenv>=1.0.0
+
+# Optional: Cohere for enhanced retrieval (if needed)
+# cohere>=5.0.0
+
+# Remove heavy dependencies that might cause issues:
+# - streamlit (not needed for FastAPI)
+# - plotly (frontend handles charts)
+# - ragas (heavy evaluation framework)
+# - rank-bm25 (can be implemented differently if needed)
+# - kubernetes (heavy client library)
