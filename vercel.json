@@ -1,19 +1,12 @@
 {
-  "version": 2,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/11_v2_deployment/api/main.py"
+      "source": "/api/(.*)",
+      "destination": "/11_v2_deployment/api/main.py"
     },
     {
-      "src": "/(.*)",
-      "dest": "/11_v2_deployment/public/$1"
+      "source": "/(.*)",
+      "destination": "/11_v2_deployment/public/$1"
     }
-  ],
-  "functions": {
-    "11_v2_deployment/api/main.py": {
-      "runtime": "python3.9",
-      "maxDuration": 30
-    }
-  }
+  ]
 }
