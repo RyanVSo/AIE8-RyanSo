@@ -21,6 +21,7 @@ dependencies = [
     "langchain-cohere>=0.1.0",
     "python-dotenv>=1.0.0",
     "tiktoken>=0.8.0",
+    "mangum>=0.17.0",
 ]
 
 [build-system]

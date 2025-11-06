@@ -111,7 +111,7 @@ async def root():
     """Health check endpoint."""
     return {"message": "Kubernetes Copilot API is running", "status": "healthy"}
 
-@app.get("/api/health")
+@app.get("/health")
 async def health_check():
     """Detailed health check."""
     try:
@@ -135,7 +135,7 @@ async def health_check():
             "cohere_configured": bool(os.getenv("COHERE_API_KEY"))
         }
 
-@app.get("/api/stats", response_model=SystemStats)
+@app.get("/stats", response_model=SystemStats)
 async def get_system_stats():
     """Get system statistics."""
     try:
@@ -150,7 +150,7 @@ async def get_system_stats():
         logger.error(f"Failed to get stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/query", response_model=QueryResponse)
+@app.post("/query", response_model=QueryResponse)
 async def process_query(request: QueryRequest):
     """Process a user query."""
     try:
@@ -189,7 +189,7 @@ async def process_query(request: QueryRequest):
             error=str(e)
         )
 
-@app.get("/api/cost-data")
+@app.get("/cost-data")
 async def get_cost_data():
     """Get cost analysis data for visualization."""
     try:
@@ -226,7 +226,7 @@ async def get_cost_data():
         logger.error(f"Failed to get cost data: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/example-queries")
+@app.get("/example-queries")
 async def get_example_queries():
     """Get example queries for the frontend."""
     return {
@@ -243,7 +243,18 @@ async def get_example_queries():
         ]
     }
 
-# For Vercel deployment
+# Export the app for Vercel
+# This is the entry point that Vercel will use
+def handler(event, context):
+    """AWS Lambda/Vercel handler"""
+    return app
+
+# For Vercel deployment - export the FastAPI app
+# Vercel will use this as the ASGI application
+from mangum import Mangum
+handler = Mangum(app)
+
+# For local development
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,12 +1,27 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/(.*)",
-      "destination": "/11_v2_deployment/api/main.py"
+      "src": "11_v2_deployment/api/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "11_v2_deployment/api/main.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/11_v2_deployment/public/$1"
+      "src": "/",
+      "dest": "11_v2_deployment/public/index.html"
+    },
+    {
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+      "dest": "11_v2_deployment/public/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "11_v2_deployment/public/index.html"
     }
   ]
 }
